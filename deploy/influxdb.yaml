@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: influxdb-config
+  namespace: miyu-base
+  labels:
+    app: influxdb-conf
+data:
+  influxdb.conf: |
+    [meta]
+    dir = "/var/lib/influxdb/meta"
+    [data]
+    dir = "/var/lib/influxdb/data"
+    engine = "tsm1"
+    wal-dir = "/var/lib/influxdb/wal"
+    [http]
+    enabled = true
+    bind-address = ":8086"
+    [retention]
+    enabled = true
+    check-interval = "30m"
+    [data]
+    cache-max-memory-size = 512m
+    cache-snapshot-memory-size = 64m
+    cache-snapshot-write-cold-duration = "10m"
+    compact-full-write-cold-duration = "4h"
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: influxdb
+    component: influxdb
+    tier: backend
+  name: influxdb
+  namespace: miyu-base
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+      component: influxdb
+      tier: backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: influxdb
+        component: influxdb
+        tier: backend
+    spec:
+      volumes:
+        - name: influxdb-data
+      containers:
+        - name: influxdb
+          image: influxdb:1.8.10
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8086
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: influxdb
+    component: influxdb
+  name: influxdb
+  namespace: miyu-base
+spec:
+  ports:
+    - name: http-8086
+      port: 8086
+      targetPort: 8086
+  selector:
+    app: influxdb
+    component: influxdb
+    tier: backend
+  type: LoadBalancer
+  loadBalancerIP: 192.168.2.231
+

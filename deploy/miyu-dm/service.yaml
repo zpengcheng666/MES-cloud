@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: miyu-dm
+    component: miyu-dm
+  name: miyu-dm
+  namespace: miyu
+spec:
+  ports:
+    - name: http-40090
+      port: 40090
+      targetPort: 40090
+  selector:
+    app: miyu-dm
+    component: miyu-dm
+    tier: backend
+  type: LoadBalancer
+  loadBalancerIP: 192.168.2.227

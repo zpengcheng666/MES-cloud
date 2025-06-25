@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: tms-server
+
+  profiles:
+    active: local
+
+server:
+  port: 45678
+
+# 日志文件配置。注意，如果 logging.file.name 不放在 bootstrap.yaml 配置文件，而是放在 application.yaml 中，会导致出现 LOG_FILE_IS_UNDEFINED 文件
+logging:
+  file:
+    name: ${user.home}/logs/${spring.application.name}.log # 日志文件名，全路径
+
+# Seata 配置
+seata:
+  enabled: true
+  #  enable-auto-data-source-proxy: false
+  application-id: ${spring.application.name} # Seata 应用编号，默认为 ${spring.application.name}
+  tx-service-group: default_tx_group # Seata 事务组编号，用于 TC 集群名
+  service:
+    # 虚拟组和分组的映射
+    vgroup-mapping:
+      default_tx_group: default
+  # Seata 注册中心配置
+  registry:
+    type: nacos # 注册中心类型，默认为 file
+    nacos:
+      server-addr: 192.168.2.225:8848
+      namespace: test # Nacos 命名空间id
+      group: SEATA_GROUP # seata分组名称
+      cluster: default # 使用的 Seata 分组

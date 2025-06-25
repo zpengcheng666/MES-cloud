@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miyu.module.ppm.dal.mysql.consignment.ConsignmentMapper">
+
+    <select id="queryConsignmentCheckById" resultType="com.miyu.module.ppm.api.purchaseConsignment.dto.ConsignmentCheckDetailDO">
+            SELECT
+            a.id as id,
+            a.consignment_id as consignment_id,
+            a.order_id as order_id,
+            a.consigned_amount as consigned_amount,
+            a.signed_amount as signed_amount,
+            a.signed_by as signed_by,
+            a.signed_time as signed_time,
+            b.material_id as material_id,
+            c.company_id as company_id,
+            d.name as company_name,
+            c.init_price as init_price,
+            c.init_tax as init_tax,
+            c.lead_time as lead_time,
+            c.quality_check as quality_check
+            from ppm_consignment_detail as a
+                 left join pd_contract_order as b
+                           on a.order_id = b.id
+                 left join pd_company_product as c
+                           on b.material_id = c.material_id
+                 left join pd_company  as d
+                           on c.company_id = d.id
+        where a.consignment_id = #{consignmentId}
+    </select>
+
+    <!--
+        一般情况下，尽可能使用 Mapper 进行 CRUD 增删改查即可。
+        无法满足的场景，例如说多表关联查询，才使用 XML 编写 SQL。
+        代码生成器暂时只生成 Mapper XML 文件本身，更多推荐 MybatisX 快速开发插件来生成查询。
+        文档可见：https://www.iocoder.cn/MyBatis/x-plugins/
+     -->
+
+</mapper>

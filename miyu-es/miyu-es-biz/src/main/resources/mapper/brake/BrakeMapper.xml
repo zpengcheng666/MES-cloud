@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miyu.module.es.dal.mysql.brake.BrakeMapper">
+
+    <select id="queryBrakeList" resultType="com.miyu.module.es.dal.dataobject.brake.BrakeDO">
+        SELECT
+        *
+        FROM es_brake
+        WHERE 1=1
+        <if test="carPlateNo != null and carPlateNo!= '' ">
+            AND register_plate = #{carPlateNo}
+        </if>
+        order by id+0
+        <if test="pageSize != null  and num != null  ">
+            limit #{num} , #{pageSize}
+        </if>
+    </select>
+
+</mapper>

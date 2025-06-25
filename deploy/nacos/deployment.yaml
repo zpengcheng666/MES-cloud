@@ -1,0 +1,76 @@
+apiVersion: apps/v1 #版本号
+kind: Deployment #类型
+metadata: #元数据
+  labels: #标签
+    app: nacos
+    component: nacos
+    tier: backend
+  name: nacos #rs名称
+  namespace: miyu #所属命名空间
+spec: #详情描述
+  progressDeadlineSeconds: 600 #部署超时时间(s)，默认是600
+  replicas: REPLICAS  #副本数量
+  revisionHistoryLimit: 10 #保留的历史版本  默认10
+  selector: #选择器，通过它指定该控制器管理哪些pod
+    matchLabels: #Labels匹配规则
+      app: nacos
+      component: nacos
+      tier: backend
+  strategy: #策略
+    rollingUpdate:  #滚动更新
+      maxSurge: 100% #最大额外可以存在的副本数，可以为百分比，也可以为整数
+      maxUnavailable: 100% #最大不可用状态的pod的最大值，可以为百分比，也可以为整数
+    type: RollingUpdate #滚动更新策略
+  template:  #模板，当副本数量不足时，会根据下面的模板创建pod副本
+    metadata: #Pod 对象的元数据，包括名称、标签等等。
+      labels:
+        app: nacos
+        component: nacos
+        tier: backend
+    spec: #Pod 对象的规范，包括容器镜像、容器端口、资源限制、环境变量等等。
+      imagePullSecrets:
+        - name: harbor-secret
+      containers: #容器
+        - name: nacos #容器名
+          image: REGISTRY/DOCKERHUB_NAMESPACE/APP_NAME:SNAPSHOT-BUILD_NUMBER #镜像
+          imagePullPolicy: Always #拉取策略
+
+#            # 健康监测
+#            livenessProbe:
+#              httpGet:
+#                path: / # 探测路径
+#                port: 80 # 端口
+#              initialDelaySeconds: 15 # 第一次探测等待
+#              timeoutSeconds: 3 # 探测的超时后等待多少秒
+#            # 就绪探测
+#            readinessProbe:
+#              httpGet:
+#                path: / # 探测路径
+#                port: 80 # 端口
+#              initialDelaySeconds: 10 # 第一次探测等待
+#              timeoutSeconds: 3 # 探测的超时后等待多少秒
+#            #环境变量
+#            env:
+#              - name: cby
+#                value: chenby
+#            # 配置容器端口
+
+
+          ports: #端口
+            - containerPort: 8848 #端口号
+              name: tcp-8848
+            - containerPort: 9848 #端口号
+              name: tcp-9848
+            - containerPort: 9849 #端口号
+              name: tcp-9849
+          terminationMessagePath: /dev/termination-log # 表示容器的异常终止消息的路径
+          terminationMessagePolicy: File #进一步自定义容器终止消息。该字段默认值为：File，即仅从终止消息文件中检索终止消息。您可以根据需要设置为：FallbackToLogsOnError，即在容器因错误退出时，如果终止消息文件为空，则使用容器日志输出的最后一部分内容来作为终止消息。
+      restartPolicy: Always #重启策略 Always:终止退出后,总是重启容器(默认策略) OnFailure:当容器异常退出(退出状态码非0)时才重启容器 Never：当容器终止退出从不重启容器
+      terminationGracePeriodSeconds: 30
+#    volumes: 挂载目录
+#      - name: nginx-conf
+#        configMap: #依赖的configMap.yaml文件
+#          name: jeecg-vue-nginx-conf
+#          items:
+#            - key: nginx.conf
+#              path: nginx.conf

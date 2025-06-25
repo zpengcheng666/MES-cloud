@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: yudao-module-infra
+    component: yudao-module-infra
+  name: yudao-module-infra
+  namespace: miyu
+spec:
+  ports:
+    - name: http-48082
+      port: 48082
+      targetPort: 48082
+  selector:
+    app: yudao-module-infra
+    component: yudao-module-infra
+    tier: backend
+  type: LoadBalancer
+  loadBalancerIP: 192.168.2.228

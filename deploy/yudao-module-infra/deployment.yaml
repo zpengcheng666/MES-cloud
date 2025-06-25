@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: yudao-module-infra
+    component: yudao-module-infra
+    tier: backend
+  name: yudao-module-infra
+  namespace: miyu
+spec:
+  progressDeadlineSeconds: 600
+  replicas: REPLICAS
+  selector:
+    matchLabels:
+      app: yudao-module-infra
+      component: yudao-module-infra
+      tier: backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: yudao-module-infra
+        component: yudao-module-infra
+        tier: backend
+    spec:
+      imagePullSecrets:
+        - name: harbor-secret
+      containers:
+        - name: yudao-module-infra
+          image: REGISTRY/DOCKERHUB_NAMESPACE/APP_NAME:SNAPSHOT-BUILD_NUMBER
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 48082
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

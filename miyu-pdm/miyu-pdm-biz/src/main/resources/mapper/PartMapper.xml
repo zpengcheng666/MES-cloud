@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miyu.module.pdm.dal.mysql.part.PartMapper">
+
+    <select id="selectTableNameByProductIdAndType" resultType="String">
+        SELECT table_name
+        FROM    pdm_data_object
+        WHERE rootproduct_id = #{rootproductId} and std_data_object = 'PartInstance'
+    </select>
+
+    <select id="selectAllFromDynamicTable" resultType="com.miyu.module.pdm.dal.dataobject.part.PartInstanceDO">
+        SELECT *
+        FROM  ${tableName}
+    </select>
+</mapper>

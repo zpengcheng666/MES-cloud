@@ -1,0 +1,92 @@
+#pv
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: system-nfs
+  namespace: miyu
+spec:
+  capacity:
+    storage: 10Gi
+  nfs:
+    server: 192.168.2.210
+    path: /st/nfs_share/miyu-base-system-nfs-pvc
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: nfs-client
+  volumeMode: Filesystem
+
+
+---
+
+#pvc
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: system-nfs-pvc
+  namespace: miyu
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: system-nfs
+  storageClassName: nfs-client
+  volumeMode: Filesystem
+
+---
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: miyu-pms
+    component: miyu-pms
+    tier: backend
+  name: miyu-pms
+  namespace: miyu
+spec:
+  progressDeadlineSeconds: 600
+  replicas: REPLICAS
+  selector:
+    matchLabels:
+      app: miyu-pms
+      component: miyu-pms
+      tier: backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: miyu-pms
+        component: miyu-pms
+        tier: backend
+
+    spec:
+      volumes:
+        - name: system-volume-pvc
+          persistentVolumeClaim:
+            claimName: system-nfs-pvc
+      imagePullSecrets:
+        - name: harbor-secret
+      containers:
+        - name: miyu-pms
+          image: REGISTRY/DOCKERHUB_NAMESPACE/APP_NAME:SNAPSHOT-BUILD_NUMBER
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 48100
+          volumeMounts:
+            - name: system-volume-pvc
+              mountPath: /root
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,1 @@
+["{\"type\":\"select\",\"field\":\"name\",\"title\":\"选择器\",\"info\":\"\",\"effect\":{\"fetch\":\"\"},\"$required\":false,\"props\":{\"_optionType\":\"接口数据\"},\"_fc_drag_tag\":\"select\",\"hidden\":false,\"display\":true}"]

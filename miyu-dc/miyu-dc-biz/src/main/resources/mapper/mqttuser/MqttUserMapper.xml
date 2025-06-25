@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miyu.module.dc.dal.mysql.mqttuser.MqttUserMapper">
+
+    <insert id="insertUser" parameterType="com.miyu.module.dc.dal.dataobject.mqttuser.MqttUserDO" >
+        insert into dc_mqtt_user
+            (username, password, salt, is_superuser)
+        VALUES
+            (#{mqttUserDO.username}, SHA2(concat(#{mqttUserDO.password}, 'slat_foo123'), 256), 'slat_foo123', 1);
+    </insert>
+
+</mapper>

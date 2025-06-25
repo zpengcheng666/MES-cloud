@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miyu.module.pdm.dal.mysql.dataobject.DataObjectMapper">
+    <resultMap id="BaseResultMap" type="com.miyu.module.pdm.dal.dataobject.dataobject.DataObjectDO" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="rootproduct_id" property="rootproductId" jdbcType="VARCHAR" />
+        <result column="std_data_object" property="stdDataObject" jdbcType="VARCHAR" />
+        <result column="customized_data_object" property="customizedDataObject" jdbcType="VARCHAR" />
+        <result column="customized_index" property="customizedIndex" jdbcType="VARCHAR" />
+        <result column="customized_type" property="customizedType" jdbcType="INTEGER" />
+        <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="intrinsic_attrs" property="intrinsicAttrs" jdbcType="VARCHAR" />
+        <result column="customized_attrs" property="customizedAttrs" jdbcType="VARCHAR" />
+        <result column="serial_number" property="serialNumber" jdbcType="INTEGER" />
+        <result column="createby" property="creator" jdbcType="VARCHAR" />
+        <result column="createtime" property="createTime" jdbcType="VARCHAR" />
+        <result column="updateby" property="updater" jdbcType="VARCHAR" />
+        <result column="updatetime" property="updateTime" jdbcType="VARCHAR" />
+        <!-- 自定义列 -->
+        <result column="product_number" property="productNumber" jdbcType="VARCHAR" />
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.miyu.module.pdm.dal.dataobject.dataobject.DataObjectDO" >
+        insert into pdm_data_object
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="rootproductId != null" >
+                rootproduct_id,
+            </if>
+            <if test="stdDataObject != null" >
+                std_data_object,
+            </if>
+            <if test="customizedDataObject != null" >
+                customized_data_object,
+            </if>
+            <if test="customizedIndex != null" >
+                customized_index,
+            </if>
+            <if test="customizedType != null" >
+                customized_type,
+            </if>
+            <if test="tableName != null" >
+                table_name,
+            </if>
+            <if test="description != null" >
+                description,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="intrinsicAttrs != null" >
+                intrinsic_attrs,
+            </if>
+            <if test="customizedAttrs != null" >
+                customized_attrs,
+            </if>
+            <if test="serialNumber != null" >
+                serial_number,
+            </if>
+            <if test="creator != null" >
+                creator,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updater != null" >
+                updater,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="rootproductId != null" >
+                #{rootproductId,jdbcType=VARCHAR},
+            </if>
+            <if test="stdDataObject != null" >
+                #{stdDataObject,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedDataObject != null" >
+                #{customizedDataObject,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedIndex != null" >
+                #{customizedIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedType != null" >
+                #{customizedType,jdbcType=INTEGER},
+            </if>
+            <if test="tableName != null" >
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null" >
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="intrinsicAttrs != null" >
+                #{intrinsicAttrs,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedAttrs != null" >
+                #{customizedAttrs,jdbcType=VARCHAR},
+            </if>
+            <if test="serialNumber != null" >
+                #{serialNumber,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null" >
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updater != null" >
+                #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 客户化标识数量 -->
+    <select id="selectCustomizedIndexCount" resultType="Integer" parameterType="String" >
+        SELECT
+            count( id )
+        FROM
+            pdm_data_object
+        WHERE
+            1 = 1
+          AND customized_index = #{customizedIndex,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="delIndex" parameterType="com.miyu.module.pdm.dal.dataobject.dataobject.DataObjectDO" >
+        delete from pdm_data_object
+        where rootproduct_id = #{rootproductId,jdbcType=VARCHAR}
+          and customized_index = #{customizedIndex,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- 修改一条 -->
+    <update id="updateByPrimaryKeySelective" parameterType="com.miyu.module.pdm.dal.dataobject.dataobject.DataObjectDO" >
+        update pdm_data_object
+        <set >
+            <if test="rootproductId != null" >
+                rootproduct_id = #{rootproductId,jdbcType=VARCHAR},
+            </if>
+            <if test="stdDataObject != null" >
+                std_data_object = #{stdDataObject,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedDataObject != null" >
+                customized_data_object = #{customizedDataObject,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedIndex != null" >
+                customized_index = #{customizedIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedType != null" >
+                customized_type = #{customizedType,jdbcType=INTEGER},
+            </if>
+            <if test="tableName != null" >
+                table_name = #{tableName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null" >
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="intrinsicAttrs != null" >
+                intrinsic_attrs = #{intrinsicAttrs,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedAttrs != null" >
+                customized_attrs = #{customizedAttrs,jdbcType=VARCHAR},
+            </if>
+            <if test="serialNumber != null" >
+                serial_number = #{serialNumber,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null" >
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updater != null" >
+                updater = #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                updateTime = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 创建中间表 -->
+    <update id="createMiddleTable" parameterType="java.lang.String" statementType="STATEMENT">
+        <bind name="tableName1" value="'pdm_'+customizedIndex+'_assemblyrelation'"/>
+        <bind name="tableName2" value="'pdm_'+customizedIndex+'_part_version_dv'"/>
+        <bind name="tableName3" value="'pdm_'+customizedIndex+'_document_revision_file'"/>
+        CREATE TABLE ${tableName1} (
+        `id` VARCHAR ( 32 ) NOT NULL COMMENT '32位唯一标识符',
+        `part_number` VARCHAR ( 255 ) DEFAULT NULL COMMENT '零件图号',
+        `rootproduct_id` VARCHAR ( 32 ) DEFAULT NULL COMMENT '产品根节点ID',
+        `name` VARCHAR ( 500 ) DEFAULT NULL COMMENT '实例号',
+        `parent_id` VARCHAR ( 32 ) DEFAULT NULL COMMENT '父节点ID',
+        `serial_number` INT ( 2 ) DEFAULT NULL COMMENT '排序',
+        `linked_id` VARCHAR ( 32 ) DEFAULT NULL COMMENT '取值为空，代表当前节点为Part或根节点Product；不为空，代表指向的子级Product对应的记录ID',
+        `vmatrix01` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，坐标原点X值',
+        `vmatrix02` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，坐标原点Y值',
+        `vmatrix03` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，坐标原点Z值',
+        `vmatrix04` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，X轴方向向量X值',
+        `vmatrix05` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，X轴方向向量Y值',
+        `vmatrix06` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，X轴方向向量Z值',
+        `vmatrix07` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，Y轴方向向量X值',
+        `vmatrix08` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，Y轴方向向量Y值',
+        `vmatrix09` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，Y轴方向向量Z值',
+        `vmatrix10` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，Z轴方向向量X值',
+        `vmatrix11` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，Z轴方向向量Y值',
+        `vmatrix12` VARCHAR ( 20 ) DEFAULT NULL COMMENT '位置坐标系，Z轴方向向量Z值',
+        `doc_revision_id` VARCHAR ( 32 ) DEFAULT NULL COMMENT '文档修订版id',
+        PRIMARY KEY ( `id` ) USING BTREE
+        ) ENGINE = INNODB DEFAULT CHARSET = utf8 ROW_FORMAT = DYNAMIC COMMENT = '部件关系表';
+
+        CREATE TABLE ${tableName2} (
+        `id` varchar(32) NOT NULL COMMENT 'ID',
+        `part_version_id` varchar(32) DEFAULT NULL COMMENT '零部件版本ID',
+        `document_version_id` varchar(32) DEFAULT NULL COMMENT '文档版本ID',
+        PRIMARY KEY (`id`) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='PV和DV对应关系';
+
+        CREATE TABLE ${tableName3} (
+        `id` varchar(32) NOT NULL COMMENT 'ID',
+        `document_revision_id` varchar(32) DEFAULT NULL COMMENT 'DRID-文档修订版id',
+        `file_id` varchar(32) DEFAULT NULL COMMENT '文件表ID',
+        PRIMARY KEY (`id`) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='DR和文件对应关系';
+    </update>
+
+    <!-- 向pdm_part_instance插入一条数据 -->
+    <insert id="insertPartInstanceSelective" parameterType="com.miyu.module.pdm.dal.dataobject.part.PartInstanceDO" >
+        <bind name="tableName" value="'pdm_'+customizedIndex+'_part_instance'"/>
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="rootproductId != null" >
+                rootproduct_id,
+            </if>
+            <if test="partVersionId != null" >
+                part_version_id,
+            </if>
+            <if test="parentId != null" >
+                parent_id,
+            </if>
+            <if test="customizedIndex != null" >
+                customized_index,
+            </if>
+            <if test="serialNumber != null" >
+                serial_number,
+            </if>
+            <if test="vmatrix01 != null" >
+                vmatrix01,
+            </if>
+            <if test="vmatrix02 != null" >
+                vmatrix02,
+            </if>
+            <if test="vmatrix03 != null" >
+                vmatrix03,
+            </if>
+            <if test="vmatrix04 != null" >
+                vmatrix04,
+            </if>
+            <if test="vmatrix05 != null" >
+                vmatrix05,
+            </if>
+            <if test="vmatrix06 != null" >
+                vmatrix06,
+            </if>
+            <if test="vmatrix07 != null" >
+                vmatrix07,
+            </if>
+            <if test="vmatrix08 != null" >
+                vmatrix08,
+            </if>
+            <if test="vmatrix09 != null" >
+                vmatrix09,
+            </if>
+            <if test="vmatrix10 != null" >
+                vmatrix10,
+            </if>
+            <if test="vmatrix11 != null" >
+                vmatrix11,
+            </if>
+            <if test="vmatrix12 != null" >
+                vmatrix12,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="targetId != null" >
+                target_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="rootproductId != null" >
+                #{rootproductId,jdbcType=VARCHAR},
+            </if>
+            <if test="partVersionId != null" >
+                #{partVersionId,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null" >
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="customizedIndex != null" >
+                #{customizedIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="serialNumber != null" >
+                #{serialNumber,jdbcType=INTEGER},
+            </if>
+            <if test="vmatrix01 != null" >
+                #{vmatrix01,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix02 != null" >
+                #{vmatrix02,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix03 != null" >
+                #{vmatrix03,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix04 != null" >
+                #{vmatrix04,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix05 != null" >
+                #{vmatrix05,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix06 != null" >
+                #{vmatrix06,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix07 != null" >
+                #{vmatrix07,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix08 != null" >
+                #{vmatrix08,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix09 != null" >
+                #{vmatrix09,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix10 != null" >
+                #{vmatrix10,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix11 != null" >
+                #{vmatrix11,jdbcType=VARCHAR},
+            </if>
+            <if test="vmatrix12 != null" >
+                #{vmatrix12,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="targetId != null" >
+                #{targetId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 客户化标识下拉框 -->
+    <select id="selectAllByRIDAndCID" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        SELECT
+            a.*,b. product_number
+        FROM
+            pdm_data_object a
+                LEFT JOIN pdm_root_product b on a.rootproduct_id=b.id
+        WHERE
+            1 = 1
+          AND a.rootproduct_id = #{rootproductId,jdbcType=VARCHAR}
+          AND a.customized_index = #{customizedIndex,jdbcType=VARCHAR}
+    </select>
+
+
+    <!-- 创建表 -->
+    <update id="createTable" parameterType="java.lang.String">
+        CREATE TABLE ${tableName}(
+        id VARCHAR(32) PRIMARY KEY COMMENT '主键',
+        <foreach collection="attrsList" item="column" open="" separator="," close="">
+            <if test="column.attr_type='1'">
+                <bind name="colType" value="'int('+column.attr_length+')'"/>
+            </if>
+            <if test="column.attr_type='2'">
+                <bind name="colType" value="'float('+column.attr_length+')'"/>
+            </if>
+            <if test="column.attr_type='3'">
+                <bind name="colType" value="'varchar('+column.attr_length+')'"/>
+            </if>
+            ${column.attr_name} ${colType} COMMENT '${column.attr_alias}'
+        </foreach>
+        )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='${tableName}';
+    </update>
+
+    <select id="selectOneById" resultType="java.util.Map">
+        SELECT
+            a.*,
+            b.product_number
+        FROM
+            pdm_data_object a
+                LEFT JOIN
+            pdm_root_product b ON a.rootproduct_id = b.id
+        WHERE a.id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="savePM" parameterType="java.util.Map" statementType="STATEMENT">
+        insert into ${pmTableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="partNumber != null">
+                part_number,
+            </if>
+            <if test="partName != null">
+                part_name,
+            </if>
+            <if test="rootProductId != null">
+                rootproduct_id,
+            </if>
+            <if test="partType != null">
+                part_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ${id},
+            </if>
+            <if test="partNumber != null">
+                ${partNumber},
+            </if>
+            <if test="partName != null">
+                ${partName},
+            </if>
+            <if test="rootProductId != null">
+                ${rootProductId},
+            </if>
+            <if test="partType != null">
+                ${partType},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="savePV" parameterType="java.util.Map" statementType="STATEMENT">
+        insert into ${pvTableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="partMasterId != null">
+                part_master_id,
+            </if>
+            <if test="partVersion != null">
+                part_version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ${id},
+            </if>
+            <if test="partMasterId != null">
+                ${partMasterId},
+            </if>
+            <if test="partVersion != null">
+                ${partVersion},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="savePartMaster" parameterType="java.util.Map">
+        insert into pdm_part_master
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="part_number != null">
+                part_number,
+            </if>
+            <if test="part_name != null">
+                part_name,
+            </if>
+            <if test="root_product_id != null">
+                root_product_id,
+            </if>
+            <if test="domain_id != null">
+                domain_id,
+            </if>
+            <if test="product_type != null">
+                product_type,
+            </if>
+            <if test="part_type != null">
+                part_type,
+            </if>
+            <if test="material_code != null">
+                material_code,
+            </if>
+            <if test="material_classif != null">
+                material_classif,
+            </if>
+            <if test="material_desg != null">
+                material_desg,
+            </if>
+            <if test="material_condition != null">
+                material_condition,
+            </if>
+            <if test="material_spec != null">
+                material_spec,
+            </if>
+            <if test="material_dimension != null">
+                material_dimension,
+            </if>
+            <if test="material_id != null">
+                material_id,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="updater != null">
+                updater,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="part_number != null">
+                #{part_number,jdbcType=VARCHAR},
+            </if>
+            <if test="part_name != null">
+                #{part_name,jdbcType=VARCHAR},
+            </if>
+            <if test="root_product_id != null">
+                #{root_product_id,jdbcType=VARCHAR},
+            </if>
+            <if test="domain_id != null">
+                #{domain_id,jdbcType=VARCHAR},
+            </if>
+            <if test="product_type != null">
+                #{product_type,jdbcType=VARCHAR},
+            </if>
+            <if test="part_type != null">
+                #{part_type,jdbcType=VARCHAR},
+            </if>
+            <if test="material_code != null">
+                #{material_code,jdbcType=VARCHAR},
+            </if>
+            <if test="material_classif != null">
+                #{material_classif,jdbcType=VARCHAR},
+            </if>
+            <if test="material_desg != null">
+                #{material_desg,jdbcType=VARCHAR},
+            </if>
+            <if test="material_desg != null">
+                #{material_desg,jdbcType=VARCHAR},
+            </if>
+            <if test="material_condition != null">
+                #{material_condition,jdbcType=VARCHAR},
+            </if>
+            <if test="material_spec != null">
+                #{material_spec,jdbcType=VARCHAR},
+            </if>
+            <if test="material_dimension != null">
+                #{material_dimension,jdbcType=VARCHAR},
+            </if>
+            <if test="material_id != null">
+                #{material_id,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null" >
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null" >
+                updater = #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="savePartVersion" parameterType="java.util.Map">
+        insert into pdm_part_version
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="part_master_id != null">
+                part_master_id,
+            </if>
+            <if test="part_version != null">
+                part_version,
+            </if>
+            <if test="document_version_id != null">
+                document_version_id,
+            </if>
+            <if test="domain_id != null">
+                domain_id,
+            </if>
+            <if test="domain_id != null">
+                domain_id,
+            </if>
+            <if test="is_locked != null">
+                is_locked,
+            </if>
+            <if test="maturity != null">
+                maturity,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="table_name != null">
+                table_name,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="create_time != null">
+                create_time,
+            </if>
+            <if test="updater != null">
+                updater,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="part_master_id != null">
+                #{part_master_id,jdbcType=VARCHAR},
+            </if>
+            <if test="part_version != null">
+                #{part_version,jdbcType=VARCHAR},
+            </if>
+            <if test="document_version_id != null">
+                #{document_version_id,jdbcType=VARCHAR},
+            </if>
+            <if test="domain_id != null">
+                #{domain_id,jdbcType=VARCHAR},
+            </if>
+            <if test="is_locked != null">
+                #{is_locked,jdbcType=VARCHAR},
+            </if>
+            <if test="maturity != null">
+                #{maturity,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="table_name != null">
+                #{table_name,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null" >
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null" >
+                updater = #{updater,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>
